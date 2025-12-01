@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Categoría del módulo -->
+    <record id="module_adroc_shipment_template_category" model="ir.module.category">
+        <field name="name">Plantillas de Embarque</field>
+        <field name="description">Gestión de plantillas para embarques</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- Privilegio -->
+    <record model="res.groups.privilege" id="module_adroc_shipment_template_privilege">
+        <field name="name">Plantillas</field>
+        <field name="category_id" ref="module_adroc_shipment_template_category"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- Grupo Usuario de Plantillas - Todos los usuarios de embarques tienen este grupo -->
+    <record id="group_adroc_shipment_template_user" model="res.groups">
+        <field name="name">Usuario</field>
+        <field name="privilege_id" ref="module_adroc_shipment_template_privilege"/>
+    </record>
+
+    <!-- Grupo Administrador de Plantillas - Puede crear/editar/eliminar plantillas -->
+    <record id="group_adroc_shipment_template_manager" model="res.groups">
+        <field name="name">Administrador</field>
+        <field name="privilege_id" ref="module_adroc_shipment_template_privilege"/>
+        <field name="implied_ids" eval="[(4, ref('group_adroc_shipment_template_user'))]"/>
+    </record>
+
+    <!-- Hacer que usuarios de embarques (importer_exporter) tengan acceso a plantillas -->
+    <record id="mrdc_shipment_importer_exporter.mrdc_shipment_importer_exporter_group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_adroc_shipment_template_user'))]"/>
+    </record>
+
+    <!-- Hacer que managers de base tengan acceso de administrador de plantillas -->
+    <record id="mrdc_shipment_base.mrdc_shipment_base_group_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_adroc_shipment_template_manager'))]"/>
+    </record>
+
+</odoo>

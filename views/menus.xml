@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================ -->
+    <!-- Menú en Importador/Exportador de Embarques -->
+    <!-- ============================================ -->
+    <menuitem id="menu_adroc_template_importer"
+              name="Plantillas"
+              parent="mrdc_shipment_importer_exporter.menu_finance"
+              action="action_adroc_shipment_template"
+              sequence="4"/>
+
+    <!-- ============================================ -->
+    <!-- Menú en Naviera/Aerolínea (Carrier) -->
+    <!-- ============================================ -->
+    <menuitem id="menu_adroc_template_carrier"
+              name="Plantillas"
+              parent="mrdc_shipment_carrier.menu_finance"
+              action="action_adroc_shipment_template"
+              sequence="4"/>
+
+    <!-- ============================================ -->
+    <!-- Menú en Agencia de Carga (Freight Agency) -->
+    <!-- ============================================ -->
+    <menuitem id="menu_adroc_template_freight"
+              name="Plantillas"
+              parent="mrdc_shipment_freight_agency.menu_finance"
+              action="action_adroc_shipment_template"
+              sequence="4"/>
+
+    <!-- ============================================ -->
+    <!-- Menú en Agencia Aduanal (Customs Agency) -->
+    <!-- ============================================ -->
+    <menuitem id="menu_adroc_template_customs"
+              name="Plantillas"
+              parent="mrdc_shipment_customs_agency.menu_finance"
+              action="action_adroc_shipment_template"
+              sequence="4"/>
+
+    <!-- ============================================ -->
+    <!-- Menú en Gestor Aduanero (Customs Broker) -->
+    <!-- ============================================ -->
+    <menuitem id="menu_adroc_template_broker"
+              name="Plantillas"
+              parent="mrdc_shipment_customs_broker_person.menu_finance"
+              action="action_adroc_shipment_template"
+              sequence="4"/>
+
+    <!-- ============================================ -->
+    <!-- Menú en Transportista (Good Carrier) -->
+    <!-- ============================================ -->
+    <menuitem id="menu_adroc_template_good_carrier"
+              name="Plantillas"
+              parent="mrdc_shipment_good_carrier.menu_finance"
+              action="action_adroc_shipment_template"
+              sequence="4"/>
+
+    <!-- ============================================ -->
+    <!-- Menú en Configuración Embarques (Base) -->
+    <!-- ============================================ -->
+    <menuitem id="menu_adroc_template_base"
+              name="Plantillas"
+              parent="mrdc_shipment_base.menu_finance"
+              action="action_adroc_shipment_template"
+              sequence="40"/>
+
+</odoo>

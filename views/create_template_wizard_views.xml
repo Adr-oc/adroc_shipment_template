@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vista Form del Wizard Crear Plantilla -->
+    <record id="view_adroc_create_template_wizard_form" model="ir.ui.view">
+        <field name="name">adroc.create.template.wizard.form</field>
+        <field name="model">adroc.create.template.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Crear Plantilla desde Embarque">
+                <group>
+                    <group string="Información de Plantilla">
+                        <field name="shipment_id" readonly="1"/>
+                        <field name="template_name"/>
+                        <field name="notes"/>
+                    </group>
+                    <group string="Incluir en la Plantilla">
+                        <field name="include_partners"/>
+                        <field name="include_transport"/>
+                        <field name="include_goods"/>
+                        <field name="include_routes"/>
+                        <field name="include_contacts"/>
+                        <field name="include_states"/>
+                        <field name="include_config"/>
+                        <field name="include_customer_invoices"/>
+                        <field name="include_supplier_invoices"/>
+                    </group>
+                </group>
+                <separator string="Vista Previa"/>
+                <group>
+                    <field name="preview_text" nolabel="1" readonly="1"
+                           widget="text" class="o_field_text_small"/>
+                </group>
+                <footer>
+                    <button name="action_create_template" string="Crear Plantilla"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir el wizard desde el embarque -->
+    <record id="action_create_template_from_shipment" model="ir.actions.act_window">
+        <field name="name">Crear Plantilla</field>
+        <field name="res_model">adroc.create.template.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="mrdc_shipment_base.model_mrdc_shipment"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+</odoo>

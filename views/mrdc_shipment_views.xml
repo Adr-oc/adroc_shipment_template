@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================ -->
+    <!-- Botones de plantilla en TODAS las vistas de mrdc.shipment -->
+    <!-- ============================================ -->
+
+    <!-- 1. Importador/Exportador -->
+    <record id="view_mrdc_shipment_form_template_importer" model="ir.ui.view">
+        <field name="name">mrdc.shipment.form.template.importer</field>
+        <field name="model">mrdc.shipment</field>
+        <field name="inherit_id" ref="mrdc_shipment_importer_exporter.view_mrdc_shipment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button name="action_open_load_template_wizard"
+                        type="object"
+                        string="Cargar Plantilla"
+                        class="btn-secondary"
+                        icon="fa-magic"/>
+                <button name="action_open_create_template_wizard"
+                        type="object"
+                        string="Crear Plantilla"
+                        class="btn-secondary"
+                        icon="fa-save"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 2. Naviera/Aerolínea (Carrier) -->
+    <record id="view_mrdc_shipment_form_template_carrier" model="ir.ui.view">
+        <field name="name">mrdc.shipment.form.template.carrier</field>
+        <field name="model">mrdc.shipment</field>
+        <field name="inherit_id" ref="mrdc_shipment_carrier.view_mrdc_shipment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button name="action_open_load_template_wizard"
+                        type="object"
+                        string="Cargar Plantilla"
+                        class="btn-secondary"
+                        icon="fa-magic"/>
+                <button name="action_open_create_template_wizard"
+                        type="object"
+                        string="Crear Plantilla"
+                        class="btn-secondary"
+                        icon="fa-save"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 3. Agencia de Carga (Freight Agency) -->
+    <record id="view_mrdc_shipment_form_template_freight" model="ir.ui.view">
+        <field name="name">mrdc.shipment.form.template.freight</field>
+        <field name="model">mrdc.shipment</field>
+        <field name="inherit_id" ref="mrdc_shipment_freight_agency.view_mrdc_shipment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button name="action_open_load_template_wizard"
+                        type="object"
+                        string="Cargar Plantilla"
+                        class="btn-secondary"
+                        icon="fa-magic"/>
+                <button name="action_open_create_template_wizard"
+                        type="object"
+                        string="Crear Plantilla"
+                        class="btn-secondary"
+                        icon="fa-save"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 4. Agencia Aduanal (Customs Agency) -->
+    <record id="view_mrdc_shipment_form_template_customs" model="ir.ui.view">
+        <field name="name">mrdc.shipment.form.template.customs</field>
+        <field name="model">mrdc.shipment</field>
+        <field name="inherit_id" ref="mrdc_shipment_customs_agency.view_mrdc_shipment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button name="action_open_load_template_wizard"
+                        type="object"
+                        string="Cargar Plantilla"
+                        class="btn-secondary"
+                        icon="fa-magic"/>
+                <button name="action_open_create_template_wizard"
+                        type="object"
+                        string="Crear Plantilla"
+                        class="btn-secondary"
+                        icon="fa-save"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 5. Gestor Aduanero (Customs Broker Person) -->
+    <record id="view_mrdc_shipment_form_template_broker" model="ir.ui.view">
+        <field name="name">mrdc.shipment.form.template.broker</field>
+        <field name="model">mrdc.shipment</field>
+        <field name="inherit_id" ref="mrdc_shipment_customs_broker_person.view_mrdc_shipment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button name="action_open_load_template_wizard"
+                        type="object"
+                        string="Cargar Plantilla"
+                        class="btn-secondary"
+                        icon="fa-magic"/>
+                <button name="action_open_create_template_wizard"
+                        type="object"
+                        string="Crear Plantilla"
+                        class="btn-secondary"
+                        icon="fa-save"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 6. Transportista (Good Carrier) -->
+    <record id="view_mrdc_shipment_form_template_good_carrier" model="ir.ui.view">
+        <field name="name">mrdc.shipment.form.template.good_carrier</field>
+        <field name="model">mrdc.shipment</field>
+        <field name="inherit_id" ref="mrdc_shipment_good_carrier.view_mrdc_shipment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button name="action_open_load_template_wizard"
+                        type="object"
+                        string="Cargar Plantilla"
+                        class="btn-secondary"
+                        icon="fa-magic"/>
+                <button name="action_open_create_template_wizard"
+                        type="object"
+                        string="Crear Plantilla"
+                        class="btn-secondary"
+                        icon="fa-save"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

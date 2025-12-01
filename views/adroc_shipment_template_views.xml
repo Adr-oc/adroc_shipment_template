@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_adroc_shipment_template_tree" model="ir.ui.view">
+        <field name="name">adroc.shipment.template.tree</field>
+        <field name="model">adroc.shipment.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="transport_type"/>
+                <field name="destination_country_id"/>
+                <field name="invoice_template_ids" widget="many2many_tags"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_adroc_shipment_template_form" model="ir.ui.view">
+        <field name="name">adroc.shipment.template.form</field>
+        <field name="model">adroc.shipment.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archivado" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="notes" placeholder="Notas sobre esta plantilla..."/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Página Socios -->
+                        <page string="Socios" name="partners">
+                            <group>
+                                <group string="Cliente">
+                                    <field name="partner_id"/>
+                                </group>
+                                <group string="Configuración">
+                                    <field name="property_payment_term_id"/>
+                                    <field name="currency_id"/>
+                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Socios Logísticos">
+                                    <field name="importer_exporter_id"/>
+                                    <field name="freight_agency_id"/>
+                                    <field name="carrier_id"/>
+                                </group>
+                                <group string="Aduanas y Transporte">
+                                    <field name="customs_agency_id"/>
+                                    <field name="customs_broker_person_id"/>
+                                    <field name="good_carrier_id"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Página Transporte -->
+                        <page string="Transporte" name="transport">
+                            <group>
+                                <group string="Tipo de Transporte">
+                                    <field name="transport_type"/>
+                                    <field name="incoterm"/>
+                                    <field name="vessel_flight_name"/>
+                                    <field name="voyage_number"/>
+                                </group>
+                                <group string="Mercancía">
+                                    <field name="goods_description"/>
+                                    <field name="commercial_value_usd"/>
+                                    <field name="usd_currency_id" invisible="1"/>
+                                    <field name="gross_weight_kg"/>
+                                    <field name="volume_m3"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Página Rutas -->
+                        <page string="Rutas" name="routes">
+                            <group>
+                                <group string="Origen">
+                                    <field name="origin_country_id"/>
+                                    <field name="origin_state_id"/>
+                                    <field name="origin_customs_id"/>
+                                    <field name="loading_port_airport_id"/>
+                                </group>
+                                <group string="Destino">
+                                    <field name="destination_country_id"/>
+                                    <field name="destination_state_id"/>
+                                    <field name="destination_customs_id"/>
+                                    <field name="unloading_port_airport_id"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="transshipment_port_airport_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+
+                        <!-- Página Contactos -->
+                        <page string="Contactos" name="contacts">
+                            <group>
+                                <group>
+                                    <field name="freight_agency_contact_name"/>
+                                    <field name="customs_agency_contact"/>
+                                    <field name="ground_carrier_contact"/>
+                                </group>
+                                <group>
+                                    <field name="vehicle_plate"/>
+                                    <field name="driver_name"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Página Estados Iniciales -->
+                        <page string="Estados Iniciales" name="states">
+                            <group>
+                                <group>
+                                    <field name="state"/>
+                                    <field name="importer_exporter_state"/>
+                                    <field name="freight_agency_state"/>
+                                    <field name="carrier_state"/>
+                                </group>
+                                <group>
+                                    <field name="customs_agency_state"/>
+                                    <field name="customs_broker_person_state"/>
+                                    <field name="good_carrier_state"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Página Plantillas de Factura -->
+                        <page string="Plantillas de Factura" name="invoices">
+                            <field name="invoice_template_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="invoice_type"/>
+                                    <field name="partner_id"/>
+                                    <field name="document_type"/>
+                                    <field name="journal_id"/>
+                                    <field name="partner_origin_id"/>
+                                    <field name="partner_destiny_id"/>
+                                </list>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_adroc_shipment_template_search" model="ir.ui.view">
+        <field name="name">adroc.shipment.template.search</field>
+        <field name="model">adroc.shipment.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="transport_type"/>
+                <separator/>
+                <filter name="filter_active" string="Activos" domain="[('active', '=', True)]"/>
+                <filter name="filter_archived" string="Archivados" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="filter_air" string="Aéreo" domain="[('transport_type', '=', 'air')]"/>
+                <filter name="filter_sea" string="Marítimo" domain="[('transport_type', '=', 'sea')]"/>
+                <filter name="filter_land" string="Terrestre" domain="[('transport_type', '=', 'land')]"/>
+                <group>
+                    <filter name="group_transport" string="Tipo Transporte" context="{'group_by': 'transport_type'}"/>
+                    <filter name="group_partner" string="Cliente" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_adroc_shipment_template" model="ir.actions.act_window">
+        <field name="name">Plantillas de Embarque</field>
+        <field name="res_model">adroc.shipment.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_adroc_shipment_template_search"/>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear una nueva plantilla de embarque
+            </p>
+            <p>
+                Las plantillas permiten autocompletar campos al crear nuevos embarques.
+            </p>
+        </field>
+    </record>
+
+    <!-- ==================== VISTAS DE PLANTILLA DE FACTURA ==================== -->
+
+    <!-- Form View para Plantilla de Factura -->
+    <record id="view_adroc_shipment_template_invoice_form" model="ir.ui.view">
+        <field name="name">adroc.shipment.template.invoice.form</field>
+        <field name="model">adroc.shipment.template.invoice</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="template_id" readonly="1"/>
+                        <field name="name"/>
+                        <field name="invoice_type"/>
+                        <field name="partner_id"/>
+                        <field name="document_type"/>
+                    </group>
+                    <group>
+                        <field name="journal_id"/>
+                        <field name="partner_origin_id"/>
+                        <field name="partner_destiny_id"/>
+                        <field name="gtq_rate"/>
+                        <field name="usd_rate"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="tag_ids" widget="many2many_tags"/>
+                </group>
+                <notebook>
+                    <page string="Líneas">
+                        <field name="line_ids">
+                            <list editable="bottom">
+                                <field name="supplier_partner_id"/>
+                                <field name="product_id"/>
+                                <field name="description"/>
+                                <field name="currency_id"/>
+                                <field name="amount"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+</odoo>
