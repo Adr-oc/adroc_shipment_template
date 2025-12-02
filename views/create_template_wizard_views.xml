@@ -11,25 +11,41 @@
                     <group string="Información de Plantilla">
                         <field name="shipment_id" readonly="1"/>
                         <field name="template_name"/>
-                        <field name="notes"/>
+                        <field name="notes" placeholder="Notas opcionales..."/>
                     </group>
-                    <group string="Incluir en la Plantilla">
-                        <field name="include_partners"/>
-                        <field name="include_transport"/>
-                        <field name="include_goods"/>
-                        <field name="include_routes"/>
-                        <field name="include_contacts"/>
-                        <field name="include_states"/>
-                        <field name="include_config"/>
+                    <group string="Facturas a Incluir">
                         <field name="include_customer_invoices"/>
+                        <label for="customer_invoice_count" string=""/>
+                        <div>
+                            <field name="customer_invoice_count" class="oe_inline"/> facturas cliente encontradas
+                        </div>
                         <field name="include_supplier_invoices"/>
+                        <label for="supplier_invoice_count" string=""/>
+                        <div>
+                            <field name="supplier_invoice_count" class="oe_inline"/> facturas proveedor encontradas
+                        </div>
                     </group>
                 </group>
-                <separator string="Vista Previa"/>
-                <group>
-                    <field name="preview_text" nolabel="1" readonly="1"
-                           widget="text" class="o_field_text_small"/>
-                </group>
+
+                <separator string="Campos del Embarque a Incluir"/>
+
+                <div class="mb-2">
+                    <button name="action_select_all" string="Seleccionar Todos"
+                            type="object" class="btn-sm btn-outline-primary me-2"/>
+                    <button name="action_deselect_all" string="Deseleccionar Todos"
+                            type="object" class="btn-sm btn-outline-secondary"/>
+                </div>
+
+                <field name="field_line_ids" nolabel="1">
+                    <list editable="bottom" decoration-muted="not include">
+                        <field name="include" widget="boolean_toggle"/>
+                        <field name="category" optional="show"/>
+                        <field name="field_label" string="Campo" readonly="1"/>
+                        <field name="current_value" string="Valor Actual" readonly="1"/>
+                        <field name="field_name" column_invisible="1"/>
+                    </list>
+                </field>
+
                 <footer>
                     <button name="action_create_template" string="Crear Plantilla"
                             type="object" class="btn-primary"/>

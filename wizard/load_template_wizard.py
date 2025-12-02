@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+import json
 
 
 class AdrocLoadTemplateWizard(models.TransientModel):
@@ -40,43 +41,30 @@ class AdrocLoadTemplateWizard(models.TransientModel):
 
                 # Mostrar según el modo
                 if wizard.load_mode in ('all', 'shipment_only'):
-                    lines.append("INFORMACIÓN DE EMBARQUE:")
-                    if template.partner_id:
-                        lines.append(f"  - Cliente: {template.partner_id.name}")
-                    if template.importer_exporter_id:
-                        lines.append(f"  - Importador/Exportador: {template.importer_exporter_id.name}")
-                    if template.freight_agency_id:
-                        lines.append(f"  - Agencia de Carga: {template.freight_agency_id.name}")
-                    if template.carrier_id:
-                        lines.append(f"  - Naviera/Aerolínea: {template.carrier_id.name}")
-                    if template.customs_agency_id:
-                        lines.append(f"  - Agencia Aduanal: {template.customs_agency_id.name}")
-                    if template.customs_broker_person_id:
-                        lines.append(f"  - Gestor Aduanero: {template.customs_broker_person_id.name}")
-                    if template.good_carrier_id:
-                        lines.append(f"  - Transportista: {template.good_carrier_id.name}")
-                    if template.transport_type:
-                        transport_labels = {
-                            'air': 'Aéreo',
-                            'sea': 'Marítimo',
-                            'land': 'Terrestre',
-                            'multimodal': 'Multimodal'
-                        }
-                        lines.append(f"  - Tipo Transporte: {transport_labels.get(template.transport_type, template.transport_type)}")
-                    if template.incoterm:
-                        lines.append(f"  - Incoterm: {template.incoterm}")
-                    if template.origin_country_id:
-                        lines.append(f"  - País Origen: {template.origin_country_id.name}")
-                    if template.destination_country_id:
-                        lines.append(f"  - País Destino: {template.destination_country_id.name}")
-                    if template.destination_customs_id:
-                        lines.append(f"  - Aduana Destino: {template.destination_customs_id.name}")
-                    if template.goods_description:
-                        lines.append(f"  - Mercancía: {template.goods_description[:50]}...")
-                    if template.gross_weight_kg:
-                        lines.append(f"  - Peso: {template.gross_weight_kg} kg")
-                    if template.volume_m3:
-                        lines.append(f"  - Volumen: {template.volume_m3} m³")
+                    lines.append("═══ INFORMACIÓN DE EMBARQUE ═══")
+                    # Leer datos del JSON
+                    if template.template_data:
+                        try:
+                            data = json.loads(template.template_data)
+                            # Agrupar por categoría
+                            categories = {}
+                            for item in data:
+                                cat = item.get('category', 'Otros')
+                                if cat not in categories:
+                                    categories[cat] = []
+                                categories[cat].append(item)
+
+                            for category, items in categories.items():
+                                lines.append(f"\n📁 {category}:")
+                                for item in items:
+                                    label = item.get('label', item.get('field', ''))
+                                    value = item.get('display_value', item.get('value', ''))
+                                    if label and value:
+                                        lines.append(f"  • {label}: {value}")
+                        except (json.JSONDecodeError, TypeError):
+                            lines.append("  (Error al leer datos)")
+                    else:
+                        lines.append("  (Sin datos de embarque)")
 
                 # Facturas cliente
                 if wizard.load_mode in ('all', 'customer_invoice'):
@@ -85,14 +73,18 @@ class AdrocLoadTemplateWizard(models.TransientModel):
                     )
                     if customer_invoices:
                         lines.append("")
-                        lines.append(f"FACTURAS CLIENTE ({len(customer_invoices)}):")
+                        lines.append(f"═══ FACTURAS CLIENTE ({len(customer_invoices)}) ═══")
                         for idx, inv in enumerate(customer_invoices, 1):
                             partner_name = inv.partner_id.name if inv.partner_id else 'Sin definir'
-                            doc_type = dict(inv._fields['document_type'].selection).get(
-                                inv.document_type, inv.document_type or ''
-                            )
+                            doc_type = ''
+                            if inv.document_type and hasattr(inv._fields['document_type'], 'selection'):
+                                doc_type = dict(inv._fields['document_type'].selection).get(
+                                    inv.document_type, inv.document_type or ''
+                                )
                             line_count = len(inv.line_ids)
-                            lines.append(f"  - {inv.name or f'Factura {idx}'}: {partner_name} ({doc_type}) - {line_count} líneas")
+                            lines.append(f"  • {inv.name or f'Factura {idx}'}: {partner_name}")
+                            if doc_type:
+                                lines.append(f"    Tipo: {doc_type} | {line_count} líneas")
 
                 # Facturas proveedor
                 if wizard.load_mode in ('all', 'supplier_invoice'):
@@ -101,14 +93,18 @@ class AdrocLoadTemplateWizard(models.TransientModel):
                     )
                     if supplier_invoices:
                         lines.append("")
-                        lines.append(f"FACTURAS PROVEEDOR ({len(supplier_invoices)}):")
+                        lines.append(f"═══ FACTURAS PROVEEDOR ({len(supplier_invoices)}) ═══")
                         for idx, inv in enumerate(supplier_invoices, 1):
                             partner_name = inv.partner_id.name if inv.partner_id else 'Sin definir'
-                            doc_type = dict(inv._fields['document_type'].selection).get(
-                                inv.document_type, inv.document_type or ''
-                            )
+                            doc_type = ''
+                            if inv.document_type and hasattr(inv._fields['document_type'], 'selection'):
+                                doc_type = dict(inv._fields['document_type'].selection).get(
+                                    inv.document_type, inv.document_type or ''
+                                )
                             line_count = len(inv.line_ids)
-                            lines.append(f"  - {inv.name or f'Factura {idx}'}: {partner_name} ({doc_type}) - {line_count} líneas")
+                            lines.append(f"  • {inv.name or f'Factura {idx}'}: {partner_name}")
+                            if doc_type:
+                                lines.append(f"    Tipo: {doc_type} | {line_count} líneas")
 
                 wizard.preview_text = '\n'.join(lines) if lines else 'Sin datos configurados en la plantilla'
             else:
@@ -125,8 +121,9 @@ class AdrocLoadTemplateWizard(models.TransientModel):
 
         # Cargar información de embarque
         if self.load_mode in ('all', 'shipment_only'):
-            self._load_shipment_data()
-            result_messages.append('Información de embarque cargada')
+            count = self._load_shipment_data()
+            if count:
+                result_messages.append(f'{count} campo(s) cargado(s)')
 
         # Cargar facturas cliente
         if self.load_mode in ('all', 'customer_invoice'):
@@ -160,6 +157,8 @@ class AdrocLoadTemplateWizard(models.TransientModel):
         vals = self.template_id.get_shipment_values()
         if vals:
             self.shipment_id.write(vals)
+            return len(vals)
+        return 0
 
     def _load_customer_invoices(self):
         """Crea cuentas ajenas de cliente desde las plantillas"""
